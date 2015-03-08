@@ -1,0 +1,2 @@
+##### Gentoo
+type installation instructions
