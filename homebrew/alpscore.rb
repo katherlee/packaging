@@ -1,6 +1,4 @@
-# Documentation: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Formula-Cookbook.md
-#                /usr/local/Library/Contributions/example-formula.rb
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
+require 'formula'
 
 class Alpscore < Formula
   homepage "http://alpscore.org"
@@ -17,83 +15,99 @@ class Alpscore < Formula
   # options
   option "with-python", "Build python module"
   option "with-static", "Disable building static library variant"
-  option "with-mpi", "Build with MPI support"
+  option "without-mpi", "Disable building with MPI support"
   option :cxx11
   option "with-doc", "Build Documentation"
+  option "with-tests", "Build tests"
 
   # Dependencies
   # cmake
   depends_on "cmake"   => :build
+  # boost - check mpi and c++11
+  boost_options = []
+  boost_options << "with-mpi" if build.with? "mpi" 
+  boost_options << "c++11" if build.cxx11? 
+  depends_on "boost" => boost_options
   # python
   depends_on "python"  => [:optional] if build.with?"python"
-  # c++11
+  # mpi, hdf5, boost-python
   if build.cxx11?
       depends_on "open-mpi" => "c++11" if build.with? "mpi" # boost has troubles with mpich
-      depends_on "boost" => [:required, "with-c++11"]
-      depends_on "boost" => [:required, "with-c++11", "with-mpi"] if build.with?"mpi"
-      depends_on "boost-python" => [:optional, "with-c++11"] if build.with?"python"
-      depends_on "hdf5" => [:required, "with-c++11"]
+      depends_on "boost-python" => [:optional, "c++11"] if build.with?"python"
+      depends_on "hdf5" => ["c++11"]
   else
       depends_on :mpi      => [:cc, :cxx, :optional] if build.with?"mpi"
-      depends_on "boost"   => :required 
-      depends_on "boost" => [:required, "with-mpi"] if build.with?"mpi"
       depends_on "boost-python" => [:optional] if build.with?"python"
-      depends_on "hdf5"    => :required
-  end
-
-  args = []
-  # handle static/shared build
-  if build.with?"static"
-      args << "-DEnableStatic=ON"
-      args << "-DEnableShared=OFF"
-  else
-      args << "-DEnableStatic=OFF"
-      args << "-DEnableShared=ON"
-  end
-
-  # check python compilation only with shared mode
-  if build.with?"static" and build.with?"python"
-      raise <<-EOS.undent
-          Build python requires building shared libraries. Use "--without-static". 
-      EOS
-  end
-
-  # handle mpi
-  if build.with?"mpi"
-     args << "-DENABLE_MPI=ON"
-  else
-     args << "-DENABLE_MPI=OFF"
-  end
-
-  # handle python
-  if build.with?"python"
-      args << "BuildPython=ON"
-  else
-      args << "BuildPython=OFF"
-  end
-
-  # documentation
-  if build.with?"doc"
-      args << "BuildDocumentation=ON"
-  else
-      args << "BuildDocumentation=OFF"
-  end
-
-  # tutorials
-  if build.with?"tutorials"
-      args << "BuildTutorials=ON"
-  else
-      args << "BuildTutorials=OFF"
+      depends_on "hdf5"   
   end
 
   def install
-    # ENV.deparallelize  # if your formula fails when building in parallel
-    system "cmake", ".", *std_cmake_args, *args
-    system "make", "install" 
+      args = std_cmake_args
+      # force release mode (taken from eigen formula)
+      args.delete "-DCMAKE_BUILD_TYPE=None"
+      args << "-DCMAKE_BUILD_TYPE=Release"
+      # handle static/shared build
+      if build.with?"static"
+          args << "-DBuildStatic=ON"
+          args << "-DBuildShared=OFF"
+      else
+          args << "-DBuildStatic=OFF"
+          args << "-DBuildShared=ON"
+      end
+
+      # check python compilation only with shared mode
+      if build.with?"static" and build.with?"python"
+          raise <<-EOS.undent
+              Build python requires building shared libraries. Use "--without-static". 
+          EOS
+      end
+
+      # handle mpi
+      if build.with?"mpi"
+         args << "-DENABLE_MPI=ON"
+      else
+         args << "-DENABLE_MPI=OFF"
+      end
+
+      # handle python
+      if build.with?"python"
+          args << "-DBuildPython=ON"
+      else
+          args << "-DBuildPython=OFF"
+      end
+
+      # documentation
+      if build.with?"doc"
+          args << "-DDocumentation=ON"
+      else
+          args << "-DDocumentation=OFF"
+      end
+
+      # tutorials
+      if build.with?"tutorials"
+          args << "-DBuildTutorials=ON"
+      else
+          args << "-DBuildTutorials=OFF"
+      end
+
+      # testing
+      if build.with?"testing"
+          args << "-DTesting=ON"
+      else
+          args << "-DTesting=OFF"
+      end
+
+    
+      # do the actual install
+      # ENV.deparallelize  # if your formula fails when building in parallel
+      mkdir "tmp"
+      chdir "tmp"
+      system "cmake", *args, ".."
+      system "make", "install" 
   end
 
-  # Testing
+      # Testing
   test do
-      system "make", "test" # if this fails, try separate make/make install steps
+    system "make", "test" # if this fails, try separate make/make install steps
   end
 end

@@ -5,4 +5,5 @@ configuration:
 
 installation:
 
-``brew install https://raw.githubusercontent.com/ALPSCore/packaging/master/homebrew/alpscore.rb``
+``brew install -v https://raw.githubusercontent.com/ALPSCore/packaging/master/homebrew/alpscore.rb``
+where `-v` is added for verbose output
