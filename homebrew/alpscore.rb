@@ -32,12 +32,12 @@ class Alpscore < Formula
   depends_on "python"  => [:optional] if build.with?"python"
   # mpi, hdf5, boost-python
   if build.cxx11?
-      depends_on "open-mpi" => "c++11" if build.with? "mpi" # boost has troubles with mpich
-      depends_on "boost-python" => [:optional, "c++11"] if build.with?"python"
+      depends_on "open-mpi" => ["c++11", :recommended] if build.with? "mpi" # boost has troubles with mpich
+      depends_on "boost-python" => ["c++11"] if build.with?"python"
       depends_on "hdf5" => ["c++11"]
   else
-      depends_on :mpi      => [:cc, :cxx, :optional] if build.with?"mpi"
-      depends_on "boost-python" => [:optional] if build.with?"python"
+      depends_on :mpi      => [:cc, :cxx, :recommended] if build.with?"mpi"
+      depends_on "boost-python" if build.with?"python"
       depends_on "hdf5"   
   end
 
