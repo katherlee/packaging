@@ -22,9 +22,6 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE="python tutorials mpi doc tutorials test"
 
-# hdf5[threads] needed for tebd
-# szip, lpsolve
-
 DEPEND=">=dev-libs/boost-1.47.0[mpi?,python?]
     >=sci-libs/hdf5-1.8.2 
     python? ( 
