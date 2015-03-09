@@ -15,11 +15,11 @@ class Alpscore < Formula
 
   # options
   option "with-python", "Build python module"
-  option "with-static", "Disable building static library variant"
+  option "with-static", "Build static instead of shared libraries"
   option "without-mpi", "Disable building with MPI support"
   option :cxx11
-  option "with-doc", "Build Documentation"
-  option "with-tests", "Build tests"
+  option "with-doc",    "Build documentation"
+  option "with-tests",  "Build tests"
 
   # Dependencies
   # cmake
