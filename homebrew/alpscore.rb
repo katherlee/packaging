@@ -4,10 +4,10 @@ class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
   sha256 ""
-  version "0.2"
+  version "0.2.90"
 
   # fetch current version fro git (fix with first release)
-  url "https://github.com/ALPSCore/ALPSCore.git", :using => :git, :tag => "master"
+  url "https://github.com/ALPSCore/ALPSCore.git", :using => :git, :tag => "v0.2.90"
 
   # head version checked out from git
   head "https://github.com/ALPSCore/ALPSCore.git"
