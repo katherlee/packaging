@@ -1,6 +1,7 @@
 # $Id$
 
 PortSystem          1.0
+PortGroup cmake 1.0
 
 name                ALPSCore
 version             0.3.0
@@ -25,5 +26,13 @@ depends_lib         port:boost port:hdf5
 # EXTRA_CMAKE_FLAGS - extra options for CMake invocation (can be empty)
 # EXTRA_MAKE_FLAGS - extra options for the first `make` invocation (can be empty)
 # FAST_BUILD
-use_configure       no
-build.cmd           pwd
+cmake.out_of_source   yes
+configure.args        -DCMAKE_INSTALL_PREFIX=${prefix} \
+                      -DTesting=ON \
+                      -DExtensiveTesting=ON \
+                      -DCMAKE_BUILD_TYPE=Release \
+                      -DBOOST_ROOT=${prefix} \
+                      -DENABLE_MPI=FALSE \
+                      -DTestXMLOutput=TRUE \
+                      -DDocumentation=OFF
+install	            {}
