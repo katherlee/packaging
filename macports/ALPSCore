@@ -33,6 +33,6 @@ configure.args        -DCMAKE_INSTALL_PREFIX=${prefix} \
                       -DCMAKE_BUILD_TYPE=Release \
                       -DBOOST_ROOT=${prefix} \
                       -DENABLE_MPI=FALSE \
+                      -DBuildPython=OFF \
                       -DTestXMLOutput=TRUE \
                       -DDocumentation=OFF
-install	            {}
