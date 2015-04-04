@@ -3,11 +3,12 @@ require 'formula'
 class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
-  sha256 "070220292b33c6b43acb3ebc2ed20850fd98b0986d3e13fd9a593a643fb5b01b" 
-  version "0.3.0"
+  sha256 "5427a68ee74b1034521ac94a79970c1ed1ae082b23a27e09097357aca667d2a3"
+  version "0.2.90"
 
   # fetch current version fro git (fix with first release)
-  url "https://github.com/ALPSCore/ALPSCore/archive/v0.3.0.tar.gz"
+  #url "https://github.com/ALPSCore/ALPSCore.git", :using => :git, :tag => "v0.2.90"
+  url "https://github.com/ALPSCore/ALPSCore/archive/v0.2.90.tar.gz"
 
   # head version checked out from git
   head "https://github.com/ALPSCore/ALPSCore.git"
