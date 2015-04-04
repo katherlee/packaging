@@ -29,7 +29,7 @@ depends_lib         port:boost port:hdf5
 cmake.out_of_source   yes
 configure.args        -DCMAKE_INSTALL_PREFIX=${prefix} \
                       -DTesting=ON \
-                      -DExtensiveTesting=ON \
+                      -DExtensiveTesting=OFF \
                       -DCMAKE_BUILD_TYPE=Release \
                       -DBOOST_ROOT=${prefix} \
                       -DENABLE_MPI=FALSE \
