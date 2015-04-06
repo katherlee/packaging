@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup cmake 1.0
 
 name                ALPSCore
-version             0.3.0
+version             0.3.1
 categories          science
 platforms           darwin
 license             GPL-2
@@ -16,8 +16,8 @@ homepage            http://alpscore.org
 master_sites        http://github.com/ALPSCore/ALPSCore/archive/
 distfiles           v${version}.tar.gz
 
-checksums           rmd160  657ada97ffef7d322cec25cb783b8a5689440f53 \
-                    sha256  070220292b33c6b43acb3ebc2ed20850fd98b0986d3e13fd9a593a643fb5b01b
+checksums           rmd160  3ae322d742d052c070382dd4156250cec9f57d53 \
+                    sha256  91117c4503d207383b298a934325e7787359ba97b322923735dfcb4f0b9997a0
 
 depends_lib         port:boost port:hdf5
 # BOOST_ROOT - location for boost distribution
