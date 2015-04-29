@@ -3,11 +3,11 @@ require 'formula'
 class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
-  sha256 "070220292b33c6b43acb3ebc2ed20850fd98b0986d3e13fd9a593a643fb5b01b" 
-  version "0.3.0"
+  sha256 "5ef6e473063d85325a50df1a17de81c25622f66604e2f96bcf514db6388441e9"
+  version "0.4.0"
 
   # fetch current version fro git (fix with first release)
-  url "https://github.com/ALPSCore/ALPSCore/archive/v0.3.0.tar.gz"
+  url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.tar.gz"
 
   # head version checked out from git
   head "https://github.com/ALPSCore/ALPSCore.git"
@@ -25,7 +25,7 @@ class Alpscore < Formula
   depends_on "cmake"   => :build
   # boost - check mpi and c++11
   boost_options = []
-  boost_options << "with-mpi" if build.with? "mpi" 
+  boost_options << ["with-mpi", "--without-single"] if build.with? "mpi" 
   boost_options << "c++11" if build.cxx11? 
   depends_on "boost" => boost_options
   # python
