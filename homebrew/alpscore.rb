@@ -102,7 +102,8 @@ class Alpscore < Formula
       # ENV.deparallelize  # if your formula fails when building in parallel
       mkdir "tmp"
       chdir "tmp"
-      system "cmake", *args, ".."
+      args << ".."
+      system "cmake", *args
       system "make", "install" 
   end
 
