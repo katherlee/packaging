@@ -18,7 +18,7 @@ class Alpscore < Formula
   option "without-mpi", "Disable building with MPI support"
   option :cxx11
   option "with-doc",    "Build documentation"
-  option "with-tests",  "Build tests"
+  option "with-tests",  "Build and run shipped tests"
 
   # Dependencies
   # cmake
@@ -91,8 +91,8 @@ class Alpscore < Formula
           args << "-DBuildTutorials=OFF"
       end
 
-      # testing
-      if build.with?"testing"
+      # tests
+      if build.with?"tests"
           args << "-DTesting=ON"
       else
           args << "-DTesting=OFF"
@@ -105,6 +105,10 @@ class Alpscore < Formula
       chdir "tmp"
       args << ".."
       system "cmake", *args
+      if build.with?"tests"
+         system "make"
+         system "make", "test"
+      end
       system "make", "install" 
   end
 
