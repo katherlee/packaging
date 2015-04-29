@@ -3,12 +3,11 @@ require 'formula'
 class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
-  sha256 "5427a68ee74b1034521ac94a79970c1ed1ae082b23a27e09097357aca667d2a3"
-  version "0.2.90"
+  sha256 "5ef6e473063d85325a50df1a17de81c25622f66604e2f96bcf514db6388441e9"
+  version "0.4.0"
 
   # fetch current version fro git (fix with first release)
-  #url "https://github.com/ALPSCore/ALPSCore.git", :using => :git, :tag => "v0.2.90"
-  url "https://github.com/ALPSCore/ALPSCore/archive/v0.2.90.tar.gz"
+  url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.tar.gz"
 
   # head version checked out from git
   head "https://github.com/ALPSCore/ALPSCore.git"
@@ -27,6 +26,7 @@ class Alpscore < Formula
   # boost - check mpi and c++11
   boost_options = []
   boost_options << "with-mpi" if build.with? "mpi" 
+  boost_options << "without-single" if build.with? "mpi" 
   boost_options << "c++11" if build.cxx11? 
   depends_on "boost" => boost_options
   # python
@@ -103,7 +103,8 @@ class Alpscore < Formula
       # ENV.deparallelize  # if your formula fails when building in parallel
       mkdir "tmp"
       chdir "tmp"
-      system "cmake", *args, ".."
+      args << ".."
+      system "cmake", *args
       system "make", "install" 
   end
 
