@@ -25,7 +25,8 @@ class Alpscore < Formula
   depends_on "cmake"   => :build
   # boost - check mpi and c++11
   boost_options = []
-  boost_options << ["with-mpi", "--without-single"] if build.with? "mpi" 
+  boost_options << "with-mpi" if build.with? "mpi" 
+  boost_options << "without-single" if build.with? "mpi" 
   boost_options << "c++11" if build.cxx11? 
   depends_on "boost" => boost_options
   # python
