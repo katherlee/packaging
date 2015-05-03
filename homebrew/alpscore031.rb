@@ -3,11 +3,11 @@ require 'formula'
 class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
-  sha256 "5ef6e473063d85325a50df1a17de81c25622f66604e2f96bcf514db6388441e9"
-  version "0.4.0"
+  sha256 "91117c4503d207383b298a934325e7787359ba97b322923735dfcb4f0b9997a0"
+  version "0.3.1"
 
   # fetch current version fro git (fix with first release)
-  url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.tar.gz"
+  url "https://github.com/ALPSCore/ALPSCore/archive/v0.3.1.tar.gz"
 
   # head version checked out from git
   head "https://github.com/ALPSCore/ALPSCore.git"
@@ -18,7 +18,7 @@ class Alpscore < Formula
   option "without-mpi", "Disable building with MPI support"
   option :cxx11
   option "with-doc",    "Build documentation"
-  option "with-tests",  "Build and run shipped tests"
+  option "with-tests",  "Build tests"
 
   # Dependencies
   # cmake
@@ -91,10 +91,9 @@ class Alpscore < Formula
           args << "-DBuildTutorials=OFF"
       end
 
-      # tests
-      if build.with?"tests"
+      # testing
+      if build.with?"testing"
           args << "-DTesting=ON"
-          args << "-DTestXMLOutput=TRUE"
       else
           args << "-DTesting=OFF"
       end
@@ -104,31 +103,12 @@ class Alpscore < Formula
       # ENV.deparallelize  # if your formula fails when building in parallel
       mkdir "tmp"
       chdir "tmp"
-      args << ".."
-      system "cmake", *args
-      if build.with?"tests"
-         system "make"
-         system "make", "test"
-      end
+      system "cmake", *args, ".."
       system "make", "install" 
   end
 
       # Testing
   test do
-        # here we need an external test - probably best t
-    (testpath/"test.cpp").write <<-EOS.undent
-      #include <alpscore/mc/api.hpp>
-      #include <alpscore/mc/mcbase.hpp>
-      #include <alps/accumulators.hpp>
-      using namespace alpscore;
-      using namespace std;
-
-      int main()
-      {
-      }
-    EOS
-    system ENV.cxx, "test.cpp", "-std=c++1y", "-lalps-mc", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", "-o", "test"
-    system "./test"
-
+    system "make", "test" # if this fails, try separate make/make install steps
   end
 end
