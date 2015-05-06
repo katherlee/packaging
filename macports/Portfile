@@ -21,6 +21,8 @@ homepage            http://alpscore.org
 checksums           rmd160  f19ffba4c93b5b2ef42062cd7d6b2171c024b9d0 \
                     sha256  6d076f5eaa8c0ffff6afe5d3e8d2f1c56686c08862fed06970508df15d7bede2
 
+compiler.blacklist  gcc-4.2
+
 depends_lib         port:boost \
                     port:hdf5
 
