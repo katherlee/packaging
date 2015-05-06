@@ -18,7 +18,7 @@ class Alpscore < Formula
   option "without-mpi", "Disable building with MPI support"
   option :cxx11
   option "with-doc",    "Build documentation"
-  option "with-tests",  "Build tests"
+  option "with-tests",  "Build and run shipped tests"
 
   # Dependencies
   # cmake
@@ -91,9 +91,10 @@ class Alpscore < Formula
           args << "-DBuildTutorials=OFF"
       end
 
-      # testing
-      if build.with?"testing"
+      # tests
+      if build.with?"tests"
           args << "-DTesting=ON"
+          args << "-DTestXMLOutput=TRUE"
       else
           args << "-DTesting=OFF"
       end
@@ -105,11 +106,29 @@ class Alpscore < Formula
       chdir "tmp"
       args << ".."
       system "cmake", *args
+      if build.with?"tests"
+         system "make"
+         system "make", "test"
+      end
       system "make", "install" 
   end
 
       # Testing
   test do
-    system "make", "test" # if this fails, try separate make/make install steps
+        # here we need an external test - probably best t
+    (testpath/"test.cpp").write <<-EOS.undent
+      #include <alpscore/mc/api.hpp>
+      #include <alpscore/mc/mcbase.hpp>
+      #include <alps/accumulators.hpp>
+      using namespace alpscore;
+      using namespace std;
+
+      int main()
+      {
+      }
+    EOS
+    system ENV.cxx, "test.cpp", "-std=c++1y", "-lalps-mc", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", "-o", "test"
+    system "./test"
+
   end
 end
