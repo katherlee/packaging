@@ -96,17 +96,27 @@ class Alpscore < Formula
   test do
     # here we need an external test - probably best t
     (testpath/"test.cpp").write <<-EOS.undent
-      #include <alpscore/mc/api.hpp>
-      #include <alpscore/mc/mcbase.hpp>
+      #include <alps/mc/api.hpp>
+      #include <alps/mc/mcbase.hpp>
       #include <alps/accumulators.hpp>
-      using namespace alpscore;
       using namespace std;
 
       int main()
       {
+        alps::accumulators::accumulator_set set;
+        set << alps::accumulators::FullBinningAccumulator<double>("a");
+        set["a"] << 2.9 << 3.1;
       }
     EOS
-    system ENV.cxx, "test.cpp", "-lalps-mc", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", "-o", "test"
+    args_compile = %W[]
+    args_compile << "test.cpp" << "-lalps-accumulators" << "-lalps-hdf5" << "-lalps-utilities"
+    args_compile << "-lboost_filesystem-mt" << "-lboost_system-mt" << "-lboost_program_options-mt"
+    if build.with?"mpi"
+        args_compile << "-lmpi" << "-lmpi_cxx" << "-lboost_mpi-mt"
+    end
+    args_compile << "-o" << "test"
+    #system ENV.cxx, "test.cpp", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", ["-lmpi" if build.with?"mpi"],"-o", "test"
+    system ENV.cxx, *args_compile
     system "./test"
 
   end
