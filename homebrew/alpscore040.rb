@@ -4,7 +4,6 @@ class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
   sha256 "5ef6e473063d85325a50df1a17de81c25622f66604e2f96bcf514db6388441e9"
-  version "0.4.0"
 
   # fetch current version fro git (fix with first release)
   url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.tar.gz"

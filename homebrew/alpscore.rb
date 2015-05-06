@@ -4,7 +4,6 @@ class Alpscore < Formula
   homepage "http://alpscore.org"
   url "alpscore"
   sha256 "b043f5043f6fdca5efd8e1fc2ba0d893da0fd04bff8adaa213c797b44d68e72e"
-  version "0.4.5"
 
   # fetch current version fro git (fix with first release)
   url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.5.tar.gz"
@@ -24,9 +23,9 @@ class Alpscore < Formula
   depends_on "cmake"   => :build
   # boost - check mpi and c++11
   boost_options = []
-  boost_options << "with-mpi" if build.with? "mpi" 
-  boost_options << "without-single" if build.with? "mpi" 
-  boost_options << "c++11" if build.cxx11? 
+  boost_options << "with-mpi" if build.with? "mpi"
+  boost_options << "without-single" if build.with? "mpi"
+  boost_options << "c++11" if build.cxx11?
   depends_on "boost" => boost_options
   # mpi, hdf5
   if build.cxx11?
@@ -34,7 +33,7 @@ class Alpscore < Formula
       depends_on "hdf5" => ["c++11"]
   else
       depends_on :mpi      => [:cc, :cxx, :recommended] if build.with?"mpi"
-      depends_on "hdf5"   
+      depends_on "hdf5"
   end
 
   def install
@@ -54,7 +53,7 @@ class Alpscore < Formula
       # check python compilation only with shared mode
       if build.with?"static" and build.with?"python"
           raise <<-EOS.undent
-              Build python requires building shared libraries. Use "--without-static". 
+              Build python requires building shared libraries. Use "--without-static".
           EOS
       end
 
@@ -80,9 +79,7 @@ class Alpscore < Formula
           args << "-DTesting=OFF"
       end
 
-    
       # do the actual install
-      # ENV.deparallelize  # if your formula fails when building in parallel
       mkdir "tmp"
       chdir "tmp"
       # the source is at parent dir
@@ -92,12 +89,12 @@ class Alpscore < Formula
          system "make"
          system "make", "test"
       end
-      system "make", "install" 
+      system "make", "install"
   end
 
       # Testing
   test do
-        # here we need an external test - probably best t
+    # here we need an external test - probably best t
     (testpath/"test.cpp").write <<-EOS.undent
       #include <alpscore/mc/api.hpp>
       #include <alpscore/mc/mcbase.hpp>
@@ -109,7 +106,7 @@ class Alpscore < Formula
       {
       }
     EOS
-    system ENV.cxx, "test.cpp", "-std=c++1y", "-lalps-mc", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", "-o", "test"
+    system ENV.cxx, "test.cpp", "-lalps-mc", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", "-o", "test"
     system "./test"
 
   end
