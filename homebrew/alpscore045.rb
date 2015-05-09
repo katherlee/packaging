@@ -1,104 +1,63 @@
-require 'formula'
-
 class Alpscore < Formula
   homepage "http://alpscore.org"
-  url "alpscore"
-  sha256 "b043f5043f6fdca5efd8e1fc2ba0d893da0fd04bff8adaa213c797b44d68e72e"
-
-  # fetch current version fro git (fix with first release)
   url "https://github.com/ALPSCore/ALPSCore/archive/v0.4.5.tar.gz"
-
-  # head version checked out from git
+  sha256 "b043f5043f6fdca5efd8e1fc2ba0d893da0fd04bff8adaa213c797b44d68e72e"
   head "https://github.com/ALPSCore/ALPSCore.git"
 
-  # options
-  option "with-static", "Build static instead of shared libraries"
-  option "without-mpi", "Disable building with MPI support"
-  option :cxx11
-  option "with-doc",    "Build documentation"
-  option "with-check",  "Build and run shipped tests"
+  bottle do
+    root_url "https://homebrew.bintray.com/bottles-science"
+    sha256 "dff1ed0ffee80e639a15257abb4b6618a33f219d4420c356d2422908730b5133" => :yosemite
+    sha256 "7868af8f9808fefb7d3a2a4b04aafe59dd1550a0dcd71879443607bc0284e660" => :mavericks
+    sha256 "cdb246670465d0780a554d8e0bf51b70ddccea35387cc8d5bb1efc90cf5a09d5" => :mountain_lion
+  end
 
-  # Dependencies
-  # cmake
+  option :cxx11
+  option "with-check",  "Build and run shipped tests"
+  option "with-doc",    "Build documentation"
+  option "with-static", "Build static instead of shared libraries"
+
   depends_on "cmake"   => :build
-  # boost - check mpi and c++11
+  depends_on :mpi => [:cc, :cxx, :recommended]
+
   boost_options = []
-  boost_options << "with-mpi" if build.with? "mpi"
-  boost_options << "without-single" if build.with? "mpi"
+  boost_options += ["with-mpi", "without-single"] if build.with? "mpi"
   boost_options << "c++11" if build.cxx11?
   depends_on "boost" => boost_options
-  # mpi, hdf5
-  if build.cxx11?
-      depends_on "open-mpi" => ["c++11", :recommended] if build.with? "mpi" # boost has troubles with mpich
-      depends_on "hdf5" => ["c++11"]
-  else
-      depends_on :mpi      => [:cc, :cxx, :recommended] if build.with?"mpi"
-      depends_on "hdf5"
-  end
+
+  depends_on "hdf5" => ((build.cxx11?) ? ["c++11"] : [])
 
   def install
-      args = std_cmake_args
-      # force release mode (taken from eigen formula)
-      args.delete "-DCMAKE_BUILD_TYPE=None"
-      args << "-DCMAKE_BUILD_TYPE=Release"
-      # handle static/shared build
-      if build.with?"static"
-          args << "-DBuildStatic=ON"
-          args << "-DBuildShared=OFF"
-      else
-          args << "-DBuildStatic=OFF"
-          args << "-DBuildShared=ON"
-      end
+    args = std_cmake_args
+    args.delete "-DCMAKE_BUILD_TYPE=None"
+    args << "-DCMAKE_BUILD_TYPE=Release"
 
-      # check python compilation only with shared mode
-      if build.with?"static" and build.with?"python"
-          raise <<-EOS.undent
-              Build python requires building shared libraries. Use "--without-static".
-          EOS
-      end
+    if build.with? "static"
+      args << "-DBuildStatic=ON"
+      args << "-DBuildShared=OFF"
+    else
+      args << "-DBuildStatic=OFF"
+      args << "-DBuildShared=ON"
+    end
 
-      # handle mpi
-      if build.with?"mpi"
-         args << "-DENABLE_MPI=ON"
-      else
-         args << "-DENABLE_MPI=OFF"
-      end
+    args << ("-DENABLE_MPI=" + ((build.with? "mpi") ? "ON" : "OFF"))
+    args << ("-DDocumentation=" + ((build.with? "doc") ? "ON" : "OFF"))
+    args << ("-DTesting=" + ((build.with? "check") ? "ON" : "OFF"))
 
-      # documentation
-      if build.with?"doc"
-          args << "-DDocumentation=ON"
-      else
-          args << "-DDocumentation=OFF"
-      end
-
-      # check
-      if build.with?"check"
-          args << "-DTesting=ON"
-          args << "-DTestXMLOutput=TRUE"
-      else
-          args << "-DTesting=OFF"
-      end
-
-      # do the actual install
-      mkdir "tmp"
-      chdir "tmp"
-      # the source is at parent dir
+    mkdir "tmp" do
       args << ".."
       system "cmake", *args
-      if build.with?"check"
-         system "make"
-         system "make", "test"
-      end
+      system "make"
+      system "make", "test" if build.with? "check"
       system "make", "install"
+    end
   end
 
-      # Testing
   test do
-    # here we need an external test - probably best t
     (testpath/"test.cpp").write <<-EOS.undent
       #include <alps/mc/api.hpp>
       #include <alps/mc/mcbase.hpp>
       #include <alps/accumulators.hpp>
+      #include <alps/params.hpp>
       using namespace std;
 
       int main()
@@ -106,18 +65,18 @@ class Alpscore < Formula
         alps::accumulators::accumulator_set set;
         set << alps::accumulators::FullBinningAccumulator<double>("a");
         set["a"] << 2.9 << 3.1;
+
+        alps::params p;
+        p["myparam"] = 1.0;
       }
     EOS
-    args_compile = %W[]
-    args_compile << "test.cpp" << "-lalps-accumulators" << "-lalps-hdf5" << "-lalps-utilities"
-    args_compile << "-lboost_filesystem-mt" << "-lboost_system-mt" << "-lboost_program_options-mt"
-    if build.with?"mpi"
-        args_compile << "-lmpi" << "-lmpi_cxx" << "-lboost_mpi-mt"
-    end
+    args_compile = ["test.cpp",
+                    "-lalps-accumulators", "-lalps-hdf5", "-lalps-utilities", "-lalps-params",
+                    "-lboost_filesystem-mt", "-lboost_system-mt", "-lboost_program_options-mt"
+                   ]
+    args_compile << "-lboost_mpi-mt" if build.with? "mpi"
     args_compile << "-o" << "test"
-    #system ENV.cxx, "test.cpp", "-lalps-accumulators", "-lalps-hdf5", "-lalps-accumulators", ["-lmpi" if build.with?"mpi"],"-o", "test"
-    system ENV.cxx, *args_compile
+    system ((build.with? "mpi") ? "mpicxx" : ENV.cxx), *args_compile
     system "./test"
-
   end
 end
