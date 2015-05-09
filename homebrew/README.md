@@ -1,4 +1,8 @@
-##### Homebrew (Mac OS)
+#### Homebrew (Mac OS)
+##### Default way (up-to-date version)
+``brew install alpscore``
+
+##### Version-specific installation using provided homebrew formulas
 configuration:
 
 ``brew info https://raw.githubusercontent.com/ALPSCore/packaging/master/homebrew/alpscore.rb``
