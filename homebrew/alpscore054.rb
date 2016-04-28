@@ -33,11 +33,11 @@ class Alpscore < Formula
     args << "-DCMAKE_BUILD_TYPE=Release"
 
     if build.with? "static"
-      args << "-DALPS_BUILD_STATIC=ON"
-      args << "-DALPS_BUILD_SHARED=OFF"
+      args << "-DBuildStatic=ON"
+      args << "-DBuildShared=OFF"
     else
-      args << "-DALPS_BUILD_STATIC=OFF"
-      args << "-DALPS_BUILD_SHARED=ON"
+      args << "-DBuildStatic=OFF"
+      args << "-DBuildShared=ON"
     end
 
     args << ("-DENABLE_MPI=" + ((build.with? "mpi") ? "ON" : "OFF"))
