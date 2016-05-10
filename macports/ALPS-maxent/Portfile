@@ -1,0 +1,44 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem          1.0
+PortGroup           cmake 1.0
+PortGroup           github 1.0
+
+name                ALPS-Maxent
+
+github.setup        CQMP Maxent 1.0-rc3 v
+categories          science
+platforms           darwin
+license             GPL-2
+maintainers         umich.edu:egull
+
+description         A package for the calculation of spectral functions using the Maximum Entropy method
+long_description    This package provides functionality for computing the analytical continuation \
+                    of many-body response functions from the imaginary time axis to the real frequency \
+                    axis. This code is part of the ALPS applications and dependent on the ALPSCore \
+                    libraries.
+
+homepage            http://alpscore.org
+
+checksums           rmd160  b973f3415ac3cb7276b17681f8c7dfaa14f8f191 \
+                    sha256  a840c5a3d53a3f283a36bf9811497e914d09ffbd443be63ea49c71ca43960f1c
+
+compiler.blacklist  gcc-4.2
+
+depends_lib         port:boost \
+                    port:hdf5 \
+                    port:ALPSCore \
+                    port:eigen3 \
+                    port:gsl 
+
+#configure.args      -DTesting=ON \
+#                    -DExtensiveTesting=OFF \
+#                    -DBOOST_ROOT=${prefix} \
+#                    -DENABLE_MPI=TRUE \
+#                    -DMPIEXEC:STRING="${mpi.exec}" \
+#                    -DBuildPython=OFF \
+#                    -DTestXMLOutput=TRUE \
+#                    -DDocumentation=OFF
+
+cmake.out_of_source yes
