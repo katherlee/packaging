@@ -5,9 +5,9 @@ PortSystem          1.0
 PortGroup           cmake 1.0
 PortGroup           github 1.0
 
-name                ALPS-Maxent
+name                ALPS-maxent
 
-github.setup        CQMP Maxent 1.0-rc3 v
+github.setup        CQMP Maxent 1.0 v
 categories          science
 platforms           darwin
 license             GPL-2
@@ -21,24 +21,14 @@ long_description    This package provides functionality for computing the analyt
 
 homepage            http://alpscore.org
 
-checksums           rmd160  b973f3415ac3cb7276b17681f8c7dfaa14f8f191 \
-                    sha256  a840c5a3d53a3f283a36bf9811497e914d09ffbd443be63ea49c71ca43960f1c
-
+checksums           rmd160  54601a65eb8e7b778a804a7cc7426cf596d3d8f9 \
+                    sha256  6f459858e4dae5a0bf1432a34ee28157bf9870244c72e1666243d89c6c108190
 compiler.blacklist  gcc-4.2
 
 depends_lib         port:boost \
                     port:hdf5 \
                     port:ALPSCore \
                     port:eigen3 \
-                    port:gsl 
-
-#configure.args      -DTesting=ON \
-#                    -DExtensiveTesting=OFF \
-#                    -DBOOST_ROOT=${prefix} \
-#                    -DENABLE_MPI=TRUE \
-#                    -DMPIEXEC:STRING="${mpi.exec}" \
-#                    -DBuildPython=OFF \
-#                    -DTestXMLOutput=TRUE \
-#                    -DDocumentation=OFF
+                    port:gsl
 
 cmake.out_of_source yes
