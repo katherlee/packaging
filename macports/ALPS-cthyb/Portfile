@@ -1,0 +1,33 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+PortSystem          1.0
+PortGroup           cmake 1.0
+PortGroup           github 1.0
+
+name                ALPS-cthyb
+
+github.setup        ALPSCore CT-HYB 0.1 v
+categories          science
+platforms           darwin
+license             GPL-2
+maintainers         umich.edu:egull
+
+description         A package for the solution of impurity problems
+long_description    This package provides functionality for computing the solution to the \
+                    quantum impurity problem using the continous-time quantum Monte Carlo \
+                    hybridization expansion formalism as described in Phys. Rev. B 74, 155107 (2006) \
+                    This implementation is based on the ALPS libraries.
+
+homepage            http://alpscore.org
+
+checksums           rmd160  fd4041b2da54b34ee253913fc81f96579aedd726 \
+                    sha256  80e59b64059d5c8113ba7b0e3b3d57bceb9f5a8efe3c1c838d6d8bd2b8010908
+mpi.setup
+
+depends_lib         port:boost \
+                    port:hdf5 \
+                    port:ALPSCore \
+                    port:eigen3 \
+                    port:gsl
+cmake.out_of_source yes
