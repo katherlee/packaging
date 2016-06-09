@@ -4,10 +4,11 @@
 PortSystem          1.0
 PortGroup           cmake 1.0
 PortGroup           github 1.0
+PortGroup           mpi 1.0
 
 name                ALPS-cthyb
 
-github.setup        ALPSCore CT-HYB 0.1 v
+github.setup        ALPSCore CT-HYB 0.2 v
 categories          science
 platforms           darwin
 license             GPL-2
@@ -21,13 +22,13 @@ long_description    This package provides functionality for computing the soluti
 
 homepage            http://alpscore.org
 
-checksums           rmd160  fd4041b2da54b34ee253913fc81f96579aedd726 \
-                    sha256  80e59b64059d5c8113ba7b0e3b3d57bceb9f5a8efe3c1c838d6d8bd2b8010908
-mpi.setup
+checksums           rmd160  341a7f72ec1cd0b1f3cf0d317ed8d0c1eb4740a3 \
+                    sha256  03097368723d53fbb261ade1da31d4eae1bcc2ecf130df3a5c7814d1c5df88ca
 
 depends_lib         port:boost \
                     port:hdf5 \
                     port:ALPSCore \
                     port:eigen3 \
                     port:gsl
+mpi.setup
 cmake.out_of_source yes
