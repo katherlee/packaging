@@ -43,6 +43,4 @@ if {[mpi_variant_isset]} {
   configure.args-replace -DENABLE_MPI=OFF -DENABLE_MPI=ON
 }
 
-
-
 cmake.out_of_source yes
