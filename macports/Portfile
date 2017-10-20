@@ -5,7 +5,8 @@ PortGroup           cmake 1.0
 PortGroup           github 1.0
 PortGroup           mpi 1.0
 
-github.setup        ALPSCore ALPSCore 0.5.6-alpha3 v
+github.setup        ALPSCore ALPSCore 1.0.0 v
+revision            0
 categories          science
 platforms           darwin
 license             GPL-2
@@ -18,8 +19,8 @@ long_description    ALPSCore contains the core libraries of the applications and
 
 homepage            http://alpscore.org
 
-checksums           rmd160  4d3e625b51396e6407223cd743307a3650f9c9ee \
-                    sha256  ab0c10168cc5403d40688ef44fe1429d78fcd4536c819a5524d7c97d656b5d3a
+checksums           rmd160  f231bded06f5d4b90fe0f925127221238da7cfdf \
+                    sha256  2054f47929f3bdb6a0c07fb70e53194f884cdf6c830b737ed5d24312d060b12a
 
 compiler.blacklist  gcc-4.2
 
@@ -34,7 +35,6 @@ configure.args      -DTesting=ON \
                     -DBOOST_ROOT=${prefix} \
                     -DENABLE_MPI=OFF\
                     -DMPIEXEC:STRING="${mpi.exec}" \
-                    -DBuildPython=OFF \
                     -DTestXMLOutput=TRUE \
                     -DDocumentation=OFF
 
