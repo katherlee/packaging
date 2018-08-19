@@ -1,0 +1,14 @@
+os: osx
+
+osx_image: xcode 9.4
+
+install: true
+
+#env:
+#  - DO_THIS=yes
+#  - DO_THAT=yes
+
+#before_script:
+
+script:
+  - true
