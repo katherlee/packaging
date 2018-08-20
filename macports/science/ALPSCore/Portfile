@@ -26,7 +26,7 @@ compiler.blacklist  gcc-4.2
 
 depends_lib         port:boost \
                     port:hdf5  \
-                    port:eigen3
+                    port:eigen3-devel
 
 compilers.choose    cc cxx
 mpi.setup           -gcc
