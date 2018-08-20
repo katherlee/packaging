@@ -22,3 +22,4 @@ script:
   - source ./macports-ci localports $PWD/macports
   - port search ALPSCore
   - set -o pipefail; sudo port -N -v install ALPSCore 2>&1 | grep -v '^x'
+  - port -N -v test ALPSCore
