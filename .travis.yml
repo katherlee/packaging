@@ -2,6 +2,8 @@ os: osx
 
 osx_image: xcode 9.4
 
+language: cpp
+
 install: true
 
 #env:
@@ -11,4 +13,11 @@ install: true
 #before_script:
 
 script:
-  - true
+  # this was the tip of the master branch as of Aug-19-2018:
+  - macports_script_url=https://raw.githubusercontent.com/GiovanniBussi/macports-ci/1f1bc5dfb9411ca2f4265d43c63613b7add68261/macports-ci
+  - rm -f macports-ci
+  - for i in 1 2 3 4 5; do echo "Try $i"; curl -LO $macports_script_url; [[ -f macports-ci && -n "$(head -n1 macports-ci)" ]] && break; done
+  - source ./macports-ci install --keep-brew --sync=tarball
+  - source ./macports-ci localports $PWD/macports
+  - port search ALPSCore
+  - set -o pipefail; sudo port -N -v install ALPSCore 2>&1 | grep -v '^x'

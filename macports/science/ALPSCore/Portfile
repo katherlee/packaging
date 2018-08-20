@@ -5,12 +5,11 @@ PortGroup           cmake 1.0
 PortGroup           github 1.0
 PortGroup           mpi 1.0
 
-github.setup        ALPSCore ALPSCore 1.0.0 v
-revision            0
+github.setup        ALPSCore ALPSCore 2.2.0 v
 categories          science
 platforms           darwin
 license             GPL-2
-maintainers         umich.edu:galexv
+maintainers         {umich.edu:galexv @galexv}
 
 description         A package for the simulation of condensed matter physics problems: Core Libraries
 long_description    ALPSCore contains the core libraries of the applications and libraries \
@@ -19,16 +18,18 @@ long_description    ALPSCore contains the core libraries of the applications and
 
 homepage            http://alpscore.org
 
-checksums           rmd160  f231bded06f5d4b90fe0f925127221238da7cfdf \
-                    sha256  2054f47929f3bdb6a0c07fb70e53194f884cdf6c830b737ed5d24312d060b12a
+checksums           rmd160  7ef9f655f55a21658da9d7af00025d2eb7ab5a9a \
+                    sha256  01ae0c7be844d4497da96bd8b329bced3eeb4dce1101f193206e9b1c0c68068f \
+                    size 1405042
 
 compiler.blacklist  gcc-4.2
 
 depends_lib         port:boost \
-                    port:hdf5
+                    port:hdf5  \
+                    port:eigen3
 
 compilers.choose    cc cxx
-mpi.setup           -gcc -dragonegg
+mpi.setup           -gcc
 
 configure.args      -DTesting=ON \
                     -DExtensiveTesting=OFF \
