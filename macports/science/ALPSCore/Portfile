@@ -26,7 +26,7 @@ compiler.blacklist  gcc-4.2
 
 depends_lib         port:boost \
                     port:hdf5  \
-                    port:eigen3-devel
+                    path:include/eigen3/Eigen/Eigen:eigen3
 
 compilers.choose    cc cxx
 mpi.setup           -gcc
@@ -44,3 +44,6 @@ if {[mpi_variant_isset]} {
 }
 
 cmake.out_of_source yes
+
+test.run            yes
+test.target         test
