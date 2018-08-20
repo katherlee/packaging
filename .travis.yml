@@ -13,6 +13,7 @@ install: true
 #before_script:
 
 script:
+  - echo "macOS $(sw_vers -productVersion) $(sw_vers -buildVersion)"; echo "Xcode $(xcodebuild -version | awk '{print $NF}' | tr '\n' ' ')"
   # this was the tip of the master branch as of Aug-19-2018:
   - macports_script_url=https://raw.githubusercontent.com/GiovanniBussi/macports-ci/1f1bc5dfb9411ca2f4265d43c63613b7add68261/macports-ci
   - rm -f macports-ci
