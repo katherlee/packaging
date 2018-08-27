@@ -21,5 +21,6 @@ script:
   - source ./macports-ci install --keep-brew --sync=tarball
   - source ./macports-ci localports $PWD/macports
   - port search ALPSCore
-  - set -o pipefail; sudo port -N -v install ALPSCore 2>&1 | grep -v '^x'
+  - set -o pipefail; sudo port -N -v build ALPSCore 2>&1 | grep -v '^x'
   - sudo port -N -v test ALPSCore
+  - sudo port -N -v install ALPSCore
