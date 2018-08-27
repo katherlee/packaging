@@ -1,6 +1,8 @@
 os: osx
 
-osx_image: xcode 9.4
+osx_image:
+    - xcode 9.4
+    - xcode 6.4
 
 language: cpp
 
