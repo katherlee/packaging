@@ -23,6 +23,11 @@ script:
   - source ./macports-ci install --keep-brew --sync=tarball
   - source ./macports-ci localports $PWD/macports
   - port search ALPSCore
+  - port variants ALPSCore
   - set -o pipefail; sudo port -N -v build ALPSCore 2>&1 | grep -v '^x'
   - sudo port -N -v test ALPSCore
   - sudo port -N -v install ALPSCore
+
+# Dump CMake cache and the test logs in case of failure
+after_failure:
+  - for f in /opt/local/var/macports/build/_Users_travis_build_ALPSCore_packaging_macports_science_ALPSCore/ALPSCore/work/build/{CMakeCache.txt,Testing/Temporary/*}; do echo "===== $f ======"; cat $f; done
