@@ -38,6 +38,8 @@ configure.args      -DTesting=ON \
                     -DBOOST_ROOT=${prefix} \
                     -DENABLE_MPI=OFF\
                     -DMPIEXEC:STRING="${mpi.exec}" \
+                    -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=OFF \
+                    -DCMAKE_SKIP_RPATH:BOOL=OFF \
                     -DTestXMLOutput=TRUE \
                     -DDocumentation=OFF
 
@@ -46,6 +48,12 @@ if {[mpi_variant_isset]} {
 }
 
 cmake.out_of_source yes
+# Our CMake scripts manage optimization flags
+cmake.build_type    RelWithDebInfo
+configure.optflags  ""
+configure.cflags-delete   -DNDEBUG
+configure.cxxflags-delete -DNDEBUG
+configure.cppflags-delete -DNDEBUG
 
 test.run            yes
 test.target         test
